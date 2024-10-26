@@ -37,7 +37,7 @@ class EmployerService:
             EmployerRepository.save(new_employer)
 
             # Log the action
-            LogService.log_action(f"Employer '{new_employer.company_name}' registered by admin")
+            LogService.log_action(f"Employer '{new_employer.company_name}' registered")
 
             return {"message": "Employer registered successfully", "employer": new_employer.to_dict()}, 201
         except Exception as e:
@@ -58,7 +58,8 @@ class EmployerService:
         
         
         try:
-            updated_employer = EmployerRepository.save(employer)      
+            updated_employer = EmployerRepository.save(employer) 
+            LogService.log_action(f"Employer '{employer.company_name}' updated their profile")     
             return updated_employer.to_dict()  # Return as dictionary
         except Exception as e:
             db.session.rollback()
@@ -97,7 +98,8 @@ class EmployerService:
             return {"error": "Employer not found"}, 404
         
         LogService.log_action(f"Admin viewed employer '{employer.company_name}'")
-        return employer.to_dict()
+        # return employer.to_dict()
+        return Employer.query.filter_by(id=employer_id).first()  # This will return an ORM object
 
     @staticmethod
     def create_employer(data):

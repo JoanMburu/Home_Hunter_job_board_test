@@ -110,6 +110,7 @@ class MemberService:
         if not member:
             raise BadRequest(f"Member with ID {member_id} not found")
 
-        # Log the action
-        LogService.log_action(f"Admin viewed member '{member.name}'")
-        return member.to_dict()
+        # Log the action before converting the member object to a dictionary
+        LogService.log_action(f"{member.name} viewed his profile")
+
+        return member.to_dict()  # Convert to dictionary after logging

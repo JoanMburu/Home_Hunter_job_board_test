@@ -6,6 +6,7 @@ from app.repositories.member_repository import MemberRepository
 from app.services.member_services import MemberService
 from werkzeug.exceptions import BadRequest
 from app import db
+from app.services.log_service import LogService
 
 member_bp = Blueprint('member_bp', __name__)
 member_api = Api(member_bp)
@@ -38,7 +39,7 @@ class MemberResource(Resource):
         
         if current_user['role'] == 'member' and current_user['id'] != id:
             return {"error": "Unauthorized"}, 403        
-
+        LogService.log_action(f"{member.name} viewed his profile")
         return member.to_dict(), 200
 
     @jwt_required()

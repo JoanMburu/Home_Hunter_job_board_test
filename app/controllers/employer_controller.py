@@ -9,6 +9,7 @@ from datetime import datetime
 from app.services.log_service import LogService
 
 class EmployerRegistrationResource(Resource):
+    @jwt_required()
     def post(self):
         """Register a new employer"""
         data = request.get_json()  # Get the JSON data from the request
@@ -42,12 +43,11 @@ class EmployerSelfResource(Resource):
 
 
 class EmployerAdminResource(Resource):
-    # @jwt_required() 
-    # @authenticate_admin() 
-    # def get(self):
-    #     """Get all employers (Admin only)"""
-    #     employers, status_code = EmployerService.get_all_employers()
-    #     return employers, status_code
+    @jwt_required() 
+    def get(self):
+        """Get all employers (Admin only)"""
+        employers, status_code = EmployerService.get_all_employers()
+        return employers, status_code
     
     @jwt_required()
     @authenticate_admin()

@@ -55,3 +55,10 @@ class JobRepository:
     @staticmethod
     def get_all_jobs():
         return Job.query.all()
+    
+    @staticmethod
+    def get_total_jobs():
+        """Return the total number of jobs posted."""
+        return Job.query.count()
+    
+    

@@ -3,6 +3,7 @@ from app import create_app, db
 from app.models.member import Member
 from app.models.employer import Employer
 from app.models.job import Job
+from app.models.job_application import JobApplication  # Import JobApplication model
 from datetime import datetime, timedelta
 
 fake = Faker()
@@ -63,12 +64,36 @@ def seed_jobs(count=15):
 
     db.session.commit()
 
+def seed_job_applications(count=20):
+    """Seeds the database with fake Job Application data."""
+    members = Member.query.all()
+    jobs = Job.query.all()
+
+    if not members or not jobs:
+        print("Please seed members and jobs first.")
+        return
+
+    for _ in range(count):
+        application_data = {
+            'resume': fake.file_path(),  # Simulating a resume file path
+            'cover_letter': fake.file_path(),  # Simulating a cover letter file path
+            'member_id': fake.random_element(members).id,  # Randomly select a member
+            'job_id': fake.random_element(jobs).id,  # Randomly select a job
+            'status': fake.random_element(elements=("applied", "interviewed", "hired", "rejected")),
+            'created_at': datetime.utcnow()
+        }
+        job_application = JobApplication(**application_data)
+        db.session.add(job_application)
+
+    db.session.commit()
+
 if __name__ == '__main__':
     app = create_app()
     with app.app_context():
         db.create_all()  # Ensure tables are created
-        seed_members(10)
-        seed_employers(5)
-        seed_jobs(15)
+        seed_members(10)  # Seed members
+        seed_employers(5)  # Seed employers
+        seed_jobs(15)  # Seed jobs
+        seed_job_applications(20)  # Seed job applications
 
-    print("Database seeded with fake member, employer, and job data.")
+    print("Database seeded with fake member, employer, job, and job application data.")

@@ -14,7 +14,7 @@ class AuthResource(Resource):
         password = data.get('password')
 
         # Try authenticating member first
-        member = Member.query.filter_by(email=email).first()
+        member = Member.query.filter_by(email=email.lower()).first()
         if member and member.check_password(password):
             if member.role in ['admin', 'supervisor','member']:
                 access_token = create_access_token(identity={"id": member.id, "role": member.role})

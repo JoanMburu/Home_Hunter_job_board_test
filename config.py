@@ -18,6 +18,8 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = 3600  # 1 hour
     JWT_REFRESH_TOKEN_EXPIRES = 2592000  # 30 days
 
-    
     PER_PAGE = 10  # Pagination
 
+    # Caching configuration
+    CACHE_TYPE = 'SimpleCache'  # You can use RedisCache for production
+    CACHE_DEFAULT_TIMEOUT = 300  # Cache timeout of 5 minutes
